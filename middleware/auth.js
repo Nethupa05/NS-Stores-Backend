@@ -35,6 +35,12 @@ export const protect = async (req, res, next) => {
         });
       }
 
+      // Update login count and last login time
+      await User.findByIdAndUpdate(user._id, {
+        $inc: { loginCount: 1 },
+        lastLogin: new Date()
+      });
+
       req.user = user;
       next();
     } catch (error) {

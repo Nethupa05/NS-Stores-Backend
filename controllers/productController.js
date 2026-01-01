@@ -153,6 +153,10 @@ export const updateProduct = async (req, res) => {
       // URL input - use URL as-is
       req.body.image = req.body.image.trim();
       console.log('Using image URL for update:', req.body.image);
+    } else if (req.body.removeImage === 'true') {
+      // Explicitly remove image
+      req.body.image = '';
+      console.log('Removing image from product');
     }
 
     console.log('Update data:', req.body);

@@ -9,6 +9,7 @@ import quotationRouter from './routers/quotationRoutes.js';
 import reservationRouter from './routers/reservationRoutes.js';
 import dotenv from 'dotenv';
 import supplierRouter from './routers/supplierRoutes.js';
+import reportRouter from './routers/reportRoutes.js';
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ app.use("/api/users", userRouter)
 app.use("/api/quotations", quotationRouter)
 app.use("/api/suppliers", supplierRouter) // Add this line
 app.use("/api/reservations", reservationRouter);
+app.use("/api/reports", reportRouter);
 
 
 app.listen( 5000, 
