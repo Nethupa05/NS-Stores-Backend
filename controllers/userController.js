@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import User from '../models/user.js';
 import { sendTokenResponse } from '../utils/jwt.js';
 
 // @desc    Register user
@@ -12,7 +12,7 @@ export const register = async (req, res) => {
     const user = await User.create({
       fullName,
       email,
-      phone: phoneNumber, // Map phoneNumber to phone field
+      phoneNumber,
       password,
       role
     });
@@ -195,14 +195,19 @@ export const updateUser = async (req, res) => {
 // @access  Private (owner)
 export const updateMe = async (req, res) => {
   try {
+    console.log('updateMe called with:', req.body);
+    console.log('User ID:', req.user._id);
+    
     const userId = req.user._id;
 
     // Prevent updating role or isActive by normal customers
     const updates = {};
-    const allowedForSelf = ['fullName', 'phone'];
+    const allowedForSelf = ['fullName', 'phoneNumber'];
     allowedForSelf.forEach(field => {
       if (req.body[field] !== undefined) updates[field] = req.body[field];
     });
+
+    console.log('Updates object:', updates);
 
     if (req.body.password) {
       return res.status(400).json({
@@ -217,12 +222,15 @@ export const updateMe = async (req, res) => {
       context: 'query'
     }).select('-password');
 
+    console.log('Updated user:', user);
+
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
     res.status(200).json({ success: true, data: user });
   } catch (err) {
+    console.error('updateMe error:', err);
     res.status(400).json({ success: false, message: err.message });
   }
 };
