@@ -32,18 +32,21 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (Postman, server-to-server)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: [
+    'http://localhost:3000',  // React dev server
+    process.env.CLIENT_URL     // Optional: your production frontend
+  ],
   credentials: true
 }));
+
+app.options('*', cors({
+  origin: [
+    'http://localhost:3000',
+    process.env.CLIENT_URL
+  ],
+  credentials: true
+}));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
